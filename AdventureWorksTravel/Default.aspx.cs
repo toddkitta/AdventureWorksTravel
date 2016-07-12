@@ -16,8 +16,8 @@ namespace AdventureWorksTravel
 {
     public partial class _Default : Page
     {
-        private const string BASE_URI = "https://api.powerbi.com/beta/myorg/";
-        private const string BASE_ML_URI = "https://ussouthcentral.services.azureml.net/workspaces/{0}/services/{1}/execute?api-version=2.0&details=true";
+        private const string DEFAULT_ML_SERVICE_LOCATION = "ussouthcentral";
+        private const string BASE_ML_URI = "https://{0}.services.azureml.net/workspaces/{1}/services/{2}/execute?api-version=2.0&details=true";
         private const string BASE_WEATHER_URI = "http://api.wunderground.com/api/{0}/hourly10day/q/{1}.json";
 
         private List<Airport> aiports = null;
@@ -29,6 +29,7 @@ namespace AdventureWorksTravel
         private string mlWorkspaceId;
         private string mlServiceId;
         private string weatherApiKey;
+        private string mlServiceLocation;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,6 +59,7 @@ namespace AdventureWorksTravel
             mlWorkspaceId = System.Web.Configuration.WebConfigurationManager.AppSettings["mlWorkspaceId"];
             mlServiceId = System.Web.Configuration.WebConfigurationManager.AppSettings["mlServiceId"];
             weatherApiKey = System.Web.Configuration.WebConfigurationManager.AppSettings["weatherApiKey"];
+            mlServiceLocation = System.Web.Configuration.WebConfigurationManager.AppSettings["mlServiceLocation"];
         }
 
         private void InitAirports()
@@ -184,7 +186,7 @@ namespace AdventureWorksTravel
                 return;
             }
 
-            string fullMLUri = string.Format(BASE_ML_URI, mlWorkspaceId, mlServiceId);
+            string fullMLUri = string.Format(BASE_ML_URI, !String.IsNullOrWhiteSpace(mlServiceLocation) ? mlServiceLocation : DEFAULT_ML_SERVICE_LOCATION, mlWorkspaceId, mlServiceId);
             var departureDate = DateTime.Parse(txtDepartureDate.Text);
 
             prediction = new DelayPrediction();
