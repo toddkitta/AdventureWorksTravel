@@ -72,7 +72,7 @@
       ],
       "properties": {
         "name": "[parameters('siteName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+        "serverFarm": "[parameters('hostingPlanName')]"
       },
       "resources": [
         {
