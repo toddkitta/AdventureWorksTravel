@@ -1,0 +1,123 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "type": "string"
+    },
+    "hostingPlanName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "siteLocation": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string",
+      "allowedValues": [
+        "Free"
+      ],
+      "defaultValue": "Free"
+    },
+    "workerSize": {
+      "type": "string",
+      "allowedValues": [
+        "0"
+      ],
+      "defaultValue": "0"
+    },
+    "repoUrl": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "mlApiKey": {
+      "type": "string"
+    },
+    "mlWorkspaceId": {
+      "type": "string"
+    },
+    "mlServiceId": {
+      "type": "string"
+    },
+    "weatherApiKey": {
+      "type": "string"
+    }
+  },
+
+  "variables": {
+  },
+
+  "resources": [
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('siteLocation')]",
+      "properties": {
+        "name": "[parameters('hostingPlanName')]",
+        "sku": "[parameters('sku')]",
+        "workerSize": "[parameters('workerSize')]",
+        "numberOfWorkers": 1
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('siteName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[parameters('siteLocation')]",
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+      ],
+      "properties": {
+        "name": "[parameters('siteName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "type": "config",
+          "name": "web",
+          "dependsOn": [
+            "[concat('Microsoft.Web/Sites/', parameters('siteName'))]"
+          ],
+          "properties": {
+            "appSettings": [
+              {
+                "name": "mlApiKey",
+                "value": "[parameters('mlApiKey')]"
+              },
+              {
+                "name": "mlWorkspaceId",
+                "value": "[parameters('mlWorkspaceId')]"
+              },
+              {
+                "name": "mlServiceId",
+                "value": "[parameters('mlServiceId')]"
+              },
+              {
+                "name": "weatherApiKey",
+                "value": "[parameters('weatherApiKey')]"
+              }
+            ]
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]",
+            "[concat('Microsoft.Web/Sites/', parameters('siteName'), '/config/web')]"
+          ],
+          "properties": {
+            "RepoUrl": "[parameters('repoUrl')]",
+            "branch": "[parameters('branch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    }
+  ]
+}
