@@ -26,8 +26,6 @@ namespace AdventureWorksTravel
 
         // settings
         private string mlApiKey;
-        private string clientSecret;
-        private string mlStorageAccount;
         private string mlWorkspaceId;
         private string mlServiceId;
         private string weatherApiKey;
@@ -57,8 +55,6 @@ namespace AdventureWorksTravel
         private void InitSettings()
         {
             mlApiKey = System.Web.Configuration.WebConfigurationManager.AppSettings["mlApiKey"];
-            clientSecret = System.Web.Configuration.WebConfigurationManager.AppSettings["clientSecret"];
-            mlStorageAccount = System.Web.Configuration.WebConfigurationManager.AppSettings["mlStorageAccount"];
             mlWorkspaceId = System.Web.Configuration.WebConfigurationManager.AppSettings["mlWorkspaceId"];
             mlServiceId = System.Web.Configuration.WebConfigurationManager.AppSettings["mlServiceId"];
             weatherApiKey = System.Web.Configuration.WebConfigurationManager.AppSettings["weatherApiKey"];
