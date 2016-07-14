@@ -21,6 +21,8 @@ After clicking the button, you will see a screen where you will need to provide 
 * The name of your website (needs to be globally unique)
 * Where your site should be deployed
 
-![alt text](/images/azuredeploy.png "Azure Deployment GUI")
+After the web app deployment is completed, you should be able to navigate to the URL provided and test your finished product. Congratulations!
+
+![alt text](/images/webapp.png "Azure Deployment GUI")
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
