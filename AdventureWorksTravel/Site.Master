@@ -154,7 +154,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    Copyright &copy; 2015  |  <a href="#">AdventureWorks Travel, inc.</a>, all rights reserved
+                    Copyright &copy; <%= DateTime.Today.Year.ToString() %>,  |  <a href="#">AdventureWorks Travel, inc.</a>, all rights reserved
                 </div>
                 <div class="col-md-4">
                     <a href="http://www.wunderground.com/" target="_blank"><img src="images/wundergroundLogo_4c_rev_horz_small.png" alt="Weather Underground" /></a>
