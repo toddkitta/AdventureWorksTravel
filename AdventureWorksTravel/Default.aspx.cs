@@ -17,7 +17,7 @@ namespace AdventureWorksTravel
     public partial class _Default : Page
     {
         private const string DEFAULT_ML_SERVICE_LOCATION = "ussouthcentral";
-        private const string BASE_ML_URI = "https://{0}.services.azureml.net/workspaces/{1}/services/{2}/execute?api-version=2.0&details=true";
+        private const string BASE_ML_URI = "https://{0}.services.azureml.net/subscriptions/{1}/services/{2}/execute?api-version=2.0&details=true";
         private const string BASE_WEATHER_URI = "http://api.wunderground.com/api/{0}/hourly10day/q/{1}.json";
 
         private List<Airport> aiports = null;
