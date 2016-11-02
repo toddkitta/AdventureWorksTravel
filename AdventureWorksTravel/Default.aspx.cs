@@ -17,6 +17,7 @@ namespace AdventureWorksTravel
     public partial class _Default : Page
     {
         private const string DEFAULT_ML_SERVICE_LOCATION = "ussouthcentral";
+        // updated azure ml endpoint url
         private const string BASE_ML_URI = "https://{0}.services.azureml.net/subscriptions/{1}/services/{2}/execute?api-version=2.0&details=true";
         private const string BASE_WEATHER_URI = "http://api.wunderground.com/api/{0}/hourly10day/q/{1}/{2}.json";
 
