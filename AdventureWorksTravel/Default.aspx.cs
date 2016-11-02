@@ -17,8 +17,8 @@ namespace AdventureWorksTravel
     public partial class _Default : Page
     {
         private const string DEFAULT_ML_SERVICE_LOCATION = "ussouthcentral";
-        private const string BASE_ML_URI = "https://{0}.services.azureml.net/workspaces/{1}/services/{2}/execute?api-version=2.0&details=true";
-        private const string BASE_WEATHER_URI = "http://api.wunderground.com/api/{0}/hourly10day/q/{1}.json";
+        private const string BASE_ML_URI = "https://{0}.services.azureml.net/subscriptions/{1}/services/{2}/execute?api-version=2.0&details=true";
+        private const string BASE_WEATHER_URI = "http://api.wunderground.com/api/{0}/hourly10day/q/{1}/{2}.json";
 
         private List<Airport> aiports = null;
         private ForecastResult forecast = null;
@@ -42,12 +42,12 @@ namespace AdventureWorksTravel
 
                 ddlOriginAirportCode.DataSource = aiports;
                 ddlOriginAirportCode.DataTextField = "AirportCode";
-                ddlOriginAirportCode.DataValueField = "AirportWundergroundID";
+                ddlOriginAirportCode.DataValueField = "AirportState";  
                 ddlOriginAirportCode.DataBind();
 
                 ddlDestAirportCode.DataSource = aiports;
                 ddlDestAirportCode.DataTextField = "AirportCode";
-                ddlDestAirportCode.DataValueField = "AirportWundergroundID";
+                ddlDestAirportCode.DataValueField = "AirportState"; 
                 ddlDestAirportCode.DataBind();
                 ddlDestAirportCode.SelectedIndex = 12;
             }
@@ -66,24 +66,24 @@ namespace AdventureWorksTravel
         {
             aiports = new List<Airport>()
             {
-                new Airport() { AirportCode ="SEA", AirportWundergroundID="SEA" },
-                new Airport() { AirportCode ="ABQ", AirportWundergroundID="ABQ" },
-                new Airport() { AirportCode ="ANC", AirportWundergroundID="ANC" },
-                new Airport() { AirportCode ="ATL", AirportWundergroundID="ATL" },
-                new Airport() { AirportCode ="AUS", AirportWundergroundID="AUS" },
-                new Airport() { AirportCode ="CLE", AirportWundergroundID="CLE" },
-                new Airport() { AirportCode ="DTW", AirportWundergroundID="DTW" },
-                new Airport() { AirportCode ="JAX", AirportWundergroundID="JAX" },
-                new Airport() { AirportCode ="MEM", AirportWundergroundID="MEM" },
-                new Airport() { AirportCode ="MIA", AirportWundergroundID="MIA" },
-                new Airport() { AirportCode ="ORD", AirportWundergroundID="zmw:60666.6.99999" },
-                new Airport() { AirportCode ="PHX", AirportWundergroundID="PHX" },
-                new Airport() { AirportCode ="SAN", AirportWundergroundID="zmw:92140.5.99999" },
-                new Airport() { AirportCode ="SFO", AirportWundergroundID="SFO" },
-                new Airport() { AirportCode ="SJC", AirportWundergroundID="SJC" },
-                new Airport() { AirportCode ="SLC", AirportWundergroundID="SLC" },
-                new Airport() { AirportCode ="STL", AirportWundergroundID="STL" },
-                new Airport() { AirportCode ="TPA", AirportWundergroundID="TPA" }
+                new Airport() { AirportCode ="SEA", AirportWundergroundID="SEA" , AirportState="WA" },
+                new Airport() { AirportCode ="ABQ", AirportWundergroundID="ABQ" , AirportState="NM" },
+                new Airport() { AirportCode ="ANC", AirportWundergroundID="ANC" , AirportState="AK"},
+                new Airport() { AirportCode ="ATL", AirportWundergroundID="ATL" , AirportState="GA"},
+                new Airport() { AirportCode ="AUS", AirportWundergroundID="AUS" , AirportState="TX"},
+                new Airport() { AirportCode ="CLE", AirportWundergroundID="CLE" , AirportState="OH"},
+                new Airport() { AirportCode ="DTW", AirportWundergroundID="DTW" , AirportState="MI"},
+                new Airport() { AirportCode ="JAX", AirportWundergroundID="JAX" , AirportState="FL" },
+                new Airport() { AirportCode ="MEM", AirportWundergroundID="MEM" , AirportState="TN"},
+                new Airport() { AirportCode ="MIA", AirportWundergroundID="MIA" , AirportState="FL"},
+                new Airport() { AirportCode ="ORD", AirportWundergroundID="zmw:60666.6.99999" , AirportState="IL"},
+                new Airport() { AirportCode ="PHX", AirportWundergroundID="PHX" , AirportState="AZ"},
+                new Airport() { AirportCode ="SAN", AirportWundergroundID="zmw:92140.5.99999" , AirportState="CA"},
+                new Airport() { AirportCode ="SFO", AirportWundergroundID="SFO" , AirportState="CA"},
+                new Airport() { AirportCode ="SJC", AirportWundergroundID="SJC" , AirportState="CA"},
+                new Airport() { AirportCode ="SLC", AirportWundergroundID="SLC" , AirportState="UT"},
+                new Airport() { AirportCode ="STL", AirportWundergroundID="STL" , AirportState="MO"},
+                new Airport() { AirportCode ="TPA", AirportWundergroundID="TPA"  , AirportState="FL"}
             };
         }
 
@@ -100,7 +100,8 @@ namespace AdventureWorksTravel
                 DepartureDayOfWeek = ((int)departureDate.DayOfWeek) + 1, //Monday = 1
                 Carrier = txtCarrier.Text,
                 OriginAirportCode = ddlOriginAirportCode.SelectedItem.Text,
-                OriginAirportWundergroundID = ddlOriginAirportCode.SelectedItem.Value,
+                OriginAirportWundergroundID =  ddlOriginAirportCode.SelectedItem.Text, 
+                OriginAirportState = ddlOriginAirportCode.SelectedItem.Value,
                 DestAirportCode = ddlDestAirportCode.SelectedItem.Text
             };
 
@@ -144,7 +145,7 @@ namespace AdventureWorksTravel
         private async Task GetWeatherForecast(DepartureQuery departureQuery)
         {
             DateTime departureDate = departureQuery.DepartureDate;
-            string fullWeatherURI = string.Format(BASE_WEATHER_URI, weatherApiKey, departureQuery.OriginAirportWundergroundID);
+            string fullWeatherURI = string.Format(BASE_WEATHER_URI, weatherApiKey, departureQuery.OriginAirportState ,departureQuery.OriginAirportWundergroundID);
             forecast = null;
 
             try
@@ -316,6 +317,7 @@ namespace AdventureWorksTravel
     {
         public string OriginAirportCode;
         public string OriginAirportWundergroundID;
+        public string OriginAirportState;
         public string DestAirportCode;
         public DateTime DepartureDate;
         public int DepartureDayOfWeek;
@@ -326,6 +328,7 @@ namespace AdventureWorksTravel
     {
         public string AirportCode { get; set; }
         public string AirportWundergroundID { get; set; }
+        public string AirportState { get; set; }
     }
 
     #endregion
