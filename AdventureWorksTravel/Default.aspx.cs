@@ -285,6 +285,7 @@ namespace AdventureWorksTravel
             {
                 prediction = null;
                 System.Diagnostics.Trace.TraceError("Failed retrieving delay prediction: " + ex.ToString());
+                throw;
             }
         }
     }
