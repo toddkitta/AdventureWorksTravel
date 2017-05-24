@@ -57,7 +57,7 @@
                                         <p>
                                             <asp:Label ID="lblPrediction" runat="server" Text=""></asp:Label>
                                         </p>
-                                        (<asp:Label ID="lblConfidence" runat="server" Text=""></asp:Label>% confidence)
+                                        (<asp:Label ID="lblConfidence" runat="server" Text=""></asp:Label>% chance of a delay)
                                     </div>
                                 </div>
                             </div>
